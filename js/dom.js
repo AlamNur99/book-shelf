@@ -37,7 +37,6 @@ function readingCategory(title, auth, years, isComplete){
         )
     }
     
-    
     return article;
 }
 
@@ -84,6 +83,13 @@ function addBook(){
         bookself.push(bookObject);
         listCompleteRead.append(addBooks);
         updataDataToStorage();
+        Swal.fire({
+            position: 'center',
+            icon: 'success',
+            title: 'Buku Berhasil ditambahkan!',
+            showConfirmButton: false,
+            timer: 1500
+        });
     } else {
         const addBooks = readingCategory(title, auth, Number(years), false);
         const bookObject = composeBookselfObject(title, auth, Number(years), false);
@@ -91,6 +97,13 @@ function addBook(){
         bookself.push(bookObject);
         unreadList.append(addBooks);
         updataDataToStorage();
+        Swal.fire({
+            position: 'center',
+            icon: 'success',
+            title: 'Buku Berhasil ditambahkan!',
+            showConfirmButton: false,
+            timer: 1500
+        });
     }
     
 }
@@ -126,12 +139,29 @@ function undoRead(taskElement) {
 }
 
 function removeBook(taskElement) {
-    if(confirm("Apakah Anda yakin Ingin Menghapus Ini?")){
-        const bookPosition = findBookIndex(taskElement[BOOK_ITEMID]);
-        bookself.splice(bookPosition, 1);
-        taskElement.remove();
-        updataDataToStorage();
-    }
+    Swal.fire({
+        title: 'Apakah anda yakin?',
+        text: "anda akan menghapus buku ini!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Ya, hapus buku ini!'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            const bookPosition = findBookIndex(taskElement[BOOK_ITEMID]);
+            bookself.splice(bookPosition, 1);
+            taskElement.remove();
+            updataDataToStorage();
+            Swal.fire({
+                position: 'center',
+                icon: 'success',
+                title: 'Buku Berhasil dihapus!',
+                showConfirmButton: false,
+                timer: 1500
+            });
+        }
+    })
 }
 
 const textSearch = document.getElementById("searchSubmit");
